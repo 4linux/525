@@ -1,0 +1,15 @@
+[Unit]
+Description=Gogs
+After=syslog.target
+After=network.target
+After=mariadb.service mysqld.service postgresql.service memcached.service redis.service
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/gogs
+ExecStart=/opt/gogs/gogs web
+Restart=always
+Environment=USER=gogs HOME=/home/gogs
+
+[Install]
+WantedBy=multi-user.target
