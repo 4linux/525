@@ -23,11 +23,6 @@ Vagrant.configure("2") do |config|
         vb.memory = conf["memory"]
         vb.cpus = conf["cpu"]
         vb.customize ["modifyvm", :id, "--groups", "/525-InfraAgil"]
-        if name == "automation" and not File.file?('iscsi525.vdi')
-          vb.customize ['createhd', '--filename', 'iscsi525.vdi', '--size', 20 * 1024]
-          vb.customize ['storagectl', :id, '--name', 'SATA Controller', '--add', 'sata']
-          vb.customize ['storageattach', :id, '--storagectl', 'SATA Controller', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', 'iscsi525.vdi']
-        end
       end
         if "#{conf["image"]}" == "ubuntu/bionic64" or "#{conf["image"]}" == "debian/buster64"
           machine.vm.provision "shell", inline: "apt-get update ; apt-get install python -y; hostnamectl set-hostname #{name}.4labs.example"
