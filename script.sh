@@ -15,3 +15,11 @@
     echo '10.5.25.30 container.4labs.example chat.4labs.example' >> /etc/hosts
     echo '10.5.25.40 scm.4labs.example' >> /etc/hosts
     echo '10.5.25.50 log.4labs.example' >> /etc/hosts
+
+    # Criando arquivo de SWAP 
+    fallocate -l 1G /swapfile
+    chmod 600 /swapfile
+    mkswap /swapfile
+    echo -e "/swapfile swap swap defaults 0 0" >> /etc/fstab
+    swapon -a
+
