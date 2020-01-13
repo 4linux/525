@@ -1,0 +1,26 @@
+version: '3'
+
+volumes:
+  mysql_db:
+
+services:
+  wordpress:
+    image: wordpress
+    restart: always
+    ports:
+      - 80:80
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wpuser
+      WORDPRESS_DB_PASSWORD: devops@4linux
+      WORDPRESS_DB_NAME: wordpress
+  db:
+    image: mysql:5.7
+    restart: always
+    volumes:
+      - mysql_db:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wpuser
+      MYSQL_PASSWORD: devops@4linux
+      MYSQL_RANDOM_ROOT_PASSWORD: '1'

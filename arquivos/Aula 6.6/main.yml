@@ -1,0 +1,51 @@
+---
+# tasks file for docker
+- name: Instalacao das Dependencias
+  yum:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - epel-release
+    - yum-utils
+    - device-mapper-persistent-data
+    - curl
+    - lvm2
+    - vim
+    - bash-completion
+
+- name: Adicionar repositório do Docker-Engine
+  get_url:
+    url: https://download.docker.com/linux/centos/docker-ce.repo
+    dest: /etc/yum.repos.d/docer-ce.repo
+
+- name: Instalar o Docker-Engine
+  yum:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - docker-ce
+    - docker-ce-cli
+    - containerd.io
+
+- name: Instalar o Docker Machine bash completion
+  get_url:
+    url: https://raw.githubusercontent.com/docker/machine/v0.16.0/contrib/completion/bash/docker-machine.bash
+    dest: /etc/bash_completion.d/docker-machine
+
+- name: Habilitando e iniciando o serviço do Docker-ce
+  systemd:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: Instalando o docker-compose
+  get_url:
+    url: https://github.com/docker/compose/releases/download/1.24.0/docker-compose-Linux-x86_64
+    dest: /usr/local/bin/docker-compose
+    mode: 0755
+
+- name: Criando link simbolico docker-compose
+  file:
+    src: /usr/local/bin/docker-compose
+    dest: /usr/bin/docker-compose
+    state: link

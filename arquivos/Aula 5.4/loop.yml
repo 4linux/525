@@ -1,0 +1,14 @@
+# Playbook para Loop
+
+- name: Instalando uma lista de pacotes na Automation
+  hosts: automation
+  vars:
+  - packages:
+    - wget
+    - vim
+    - tree
+  tasks:
+
+  - name: Instalando pacotes
+    yum:
+      name: "{{ packages }}"

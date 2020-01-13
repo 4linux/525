@@ -1,0 +1,8 @@
+metricbeat.config.modules:
+  path: ${path.config}/modules.d/*.yml
+  reload.enabled: false
+output.logstash:
+  hosts: ["log.4labs.example:5443"]
+processors:
+  - add_host_metadata: ~
+  - add_cloud_metadata: ~

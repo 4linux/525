@@ -1,0 +1,81 @@
+---
+# tasks file for iscsi
+- name: Instalando o tgt e configurando o iscsi
+  block:
+  - package:
+      name: scsi-target-utils
+      state: present
+  - blockinfile:
+      create: yes
+      path: /etc/tgt/conf.d/4labs_scsi.conf
+      block: |
+        <target iqn.2019-05.automation.4labs.example:lun>
+          backing-store /dev/sdb
+        </target>
+  - service:
+      name: tgtd
+      state: restarted
+      enabled: yes
+  when: ansible_hostname == "automation"
+
+- name: Instalando e configurando o openiscsi
+  block:
+  - package:
+      name: ["open-iscsi", "parted", "xfsprogs", "btrfs-progs"]
+      state: present
+  - open_iscsi:
+      show_nodes: yes
+      discover: yes
+      portal: 10.5.25.10
+    register: iscsi
+  - open_iscsi:
+      login: yes
+      target: "{{ iscsi.nodes[0] }}"
+  - replace:
+      path: "/etc/iscsi/nodes/{{ iscsi.nodes[0] }}/10.5.25.10,3260,1/default"
+      regexp: "node.startup = manual"
+      replace: "node.startup = automatic"
+  - service:
+      name: open-iscsi
+      state: restarted
+      enabled: yes
+  when: ansible_hostname == "log"
+
+- name: Criando particoes no Disco
+  block:
+  - parted:
+      device: /dev/sdc
+      number: 1
+      state: present
+      part_end: 50%
+  - parted:
+      device: /dev/sdc
+      number: 2
+      state: present
+      part_start: 50%
+  - filesystem:
+      fstype: ext4
+      dev: /dev/sdc1
+  - filesystem:
+      fstype: ext3
+      dev: /dev/sdc2
+  when: ansible_hostname == "log"
+
+- name: Adicionando montagem sdbc1 e sdc2
+  block:
+  - file:
+      path: "{{ item }}"
+      state: directory
+    loop:
+      - '/log'
+      - '/bkp'
+  - lineinfile:
+      path: '/etc/fstab'
+      line: "{{ item }}"
+    loop:
+      - '/dev/sdc1 /log ext4 defaults,auto,_netdev 0 0'
+      - '/dev/sdc2 /bkp ext3 defaults,auto,_netdev 0 0'
+  - command: 'mount -a'
+    args:
+      warn: false
+  when: ansible_hostname == "log"

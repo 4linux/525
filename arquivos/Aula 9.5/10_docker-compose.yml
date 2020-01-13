@@ -1,0 +1,10 @@
+version: '3'
+services:
+  webserver:
+    build: .
+    hostname: webserver
+    ports:
+      - 80:80
+    restart: always
+    volumes:
+      - $PWD/html:/var/www/html

@@ -1,0 +1,14 @@
+[automation]
+automation.4labs.example ansible_python_interpreter=/usr/bin/python
+
+[compliance]
+compliance.4labs.example ansible_python_interpreter=/usr/bin/python3
+
+[container]
+container.4labs.example ansible_python_interpreter=/usr/bin/python
+
+[scm]
+scm.4labs.example ansible_python_interpreter=/usr/bin/python
+
+[log]
+log.4labs.example ansible_python_interpreter=/usr/bin/python3

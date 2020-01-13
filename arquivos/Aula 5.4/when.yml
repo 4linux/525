@@ -1,0 +1,11 @@
+- name: Instalando uma lista de pacotes nos servidores Ubuntu
+  hosts: all
+  tasks:
+  - name: Instalando pacotes
+    apt:
+      name: "{{ item }}"
+    loop:
+      - cmatrix
+      - sl
+      - ncdu
+    when: ansible_distribution == "Ubuntu"

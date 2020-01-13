@@ -1,0 +1,12 @@
+- name: Instalando uma lista de pacotes nos servidores Ubuntu
+  hosts: compliance log scm
+  tasks:
+
+  - name: Instalando pacotes
+    apt:
+      name: "{{ item }}"
+    loop:
+    - sl
+    - cmatrix
+    - ncdu
+    - dnsutils

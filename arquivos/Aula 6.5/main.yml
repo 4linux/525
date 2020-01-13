@@ -1,0 +1,34 @@
+---
+# tasks file for rundeck
+- name: Instalacao das Dependencias e Repositorio Rundeck
+  yum:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - vim
+    - java-1.8.0
+    - https://repo.rundeck.org/latest.rpm
+
+- name: Instalacao do Rundeck
+  yum:
+    name: rundeck
+    state: present
+
+- name: Configurando Rundeck
+  lineinfile:
+    path: "{{ item.path }}"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  loop:
+    - {path: '/etc/rundeck/framework.properties', regexp: '^framework.server.name', line: 'framework.server.name = 4labs'}
+    - {path: '/etc/rundeck/framework.properties', regexp: '^framework.server.hostname', line: 'framework.server.hostname = automation.4labs.example'}
+    - {path: '/etc/rundeck/framework.properties', regexp: '^framework.server.port', line: 'framework.server.port = 4440'}
+    - {path: '/etc/rundeck/framework.properties', regexp: '^framework.server.url', line: 'framework.server.url = http://automation.4labs.example:4440'}
+    - {path: '/etc/rundeck/rundeck-config.properties', regexp: '^grails.server', line: 'grails.serverURL=http://automation.4labs.example:4440'}
+
+
+- name: Iniciando e Habilitando o serviço do rundeck
+  systemd:
+    name: rundeckd
+    state: started
+    enabled: yes

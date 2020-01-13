@@ -1,0 +1,26 @@
+---
+# tasks file for nginx
+- name: Instalando o NGINX
+  package:
+    name: nginx
+    state: present
+
+- name: Removendo website padrao
+  file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - /var/www/html/index.nginx-debian.html
+    - /var/www/html/index.html
+    - /var/www/html/index.html
+
+- name: Copiando website 4labs
+  copy:
+    src: index.html
+    dest: /var/www/html/index.html
+
+- name: Habilitando e reiniciando o servico do NGINX
+  service:
+    name: nginx
+    state: restarted
+    enabled: yes

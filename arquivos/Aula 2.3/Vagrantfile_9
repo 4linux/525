@@ -1,0 +1,21 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+machines = {
+    "compliance" => {"image" => "ubuntu/bionic64"},
+    "container" => {"image" => "centos/7"},
+    "scm" => {"image" => "debian/buster64"},
+    "log" => {"image" => "ubuntu/bionic64"},
+    "automation" => {"image" => "centos/7"}
+}
+
+Vagrant.configure("2") do |config|
+
+  config.vm.box_check_update = false
+  machines.each do |name, conf|
+    config.vm.define "#{name}" do |machine|
+      machine.vm.box = "#{conf["image"]}"
+      machine.vm.hostname = "#{name}.4labs.example"
+    end
+  end
+end

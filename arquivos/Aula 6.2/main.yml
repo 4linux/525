@@ -1,0 +1,63 @@
+---
+# tasks file for puppet-agent
+- name: Download e instalacao do Puppet Agent - Ubuntu
+  block:
+  - get_url:
+      url: https://apt.puppetlabs.com/puppet6-release-bionic.deb
+      dest: /tmp/puppet6.deb
+  - apt:
+      deb: /tmp/puppet6.deb
+  - apt:
+      name: puppet-agent
+      state: present
+      update_cache: yes
+  when: ansible_distribution == 'Ubuntu'
+
+- name: Download e instalacao do Puppet Agent - Debian
+  block:
+  - get_url:
+      url: https://apt.puppetlabs.com/puppet-release-buster.deb
+      dest: /tmp/puppet6.deb
+  - apt:
+      deb: /tmp/puppet6.deb
+  - apt:
+      name: puppet-agent
+      state: present
+      update_cache: yes
+  when: ansible_distribution == 'Debian'
+
+- name: Download e instalacao do puppet Agent - RedHat
+  block:
+  - yum:
+      name: 'https://yum.puppet.com/puppet6-release-el-7.noarch.rpm'
+      state: present
+  - yum:
+      name: puppet-agent
+      state: present
+  when: ansible_distribution == 'CentOS'
+
+- name: Adicionando o binario do Puppet ao PATH
+  block:
+    - file:
+        path: /root/.bashrc
+        state: touch
+    - lineinfile:
+        path: /root/.bashrc
+        line: 'PATH=/sbin:/bin:/usr/sbin:/usr/bin:/opt/puppetlabs/bin:/opt/puppetlabs/bin'
+
+- name: Adicionando configurações do puppet
+  lineinfile:
+    path: '/etc/puppetlabs/puppet/puppet.conf'
+    line: "{{ item }}"
+  loop:
+    - '[main]'
+    - 'runinterval = 1h'
+    - 'server = compliance.4labs.example'
+    - '[agent]'
+    - 'certname = {{ ansible_fqdn }}'
+
+- name: Executando o Puppet Agent nos servidores
+  systemd:
+    name: puppet
+    state: restarted
+    enabled: yes

@@ -1,0 +1,4 @@
+- name: Instalando e configurando o Puppet Agent
+  hosts: all
+  roles:
+    - puppet-agent

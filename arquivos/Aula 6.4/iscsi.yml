@@ -1,0 +1,4 @@
+- name: Instalando o iSCSI
+  hosts: automation log
+  roles:
+    - iscsi

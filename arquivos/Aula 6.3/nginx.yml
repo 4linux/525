@@ -1,0 +1,4 @@
+- name: Aplicando as roles de log
+  hosts: log
+  roles:
+    - nginx
