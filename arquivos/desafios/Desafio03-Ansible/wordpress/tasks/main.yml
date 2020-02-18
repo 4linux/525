@@ -1,0 +1,33 @@
+---
+# tasks file for wordpress
+- name: Instalando o Apache e PHP
+  package:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - apache2
+    - php
+    - libapache2-mod-php
+    - php-mysql
+
+- name: Baixando e extraindo Wordpress para a pasta /var/www
+  unarchive:
+    src: https://wordpress.org/latest.tar.gz
+    dest: /var/www
+    remote_src: yes
+
+- name: Configurando Wordpress
+  copy:
+    src: wp-config.php
+    dest: /var/www/wordpress/wp-config.php
+
+- name: Configurando Wordpress no Apache
+  copy:
+    src: 000-default.conf
+    dest: /etc/apache2/sites-available/000-default.conf
+
+- name: Habilitando e reiniciando o servico do Apache
+  service:
+    name: apache2
+    state: restarted
+    enabled: yes
