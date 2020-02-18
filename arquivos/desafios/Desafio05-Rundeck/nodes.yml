@@ -1,0 +1,33 @@
+automation:
+  nodename: automation
+  hostname: automation.4labs.example
+  username: root
+  ssh-key-storage-path: keys/devops
+
+compliance:
+  nodename: compliance
+  hostname: compliance.4labs.example
+  description: Compliance Node
+  username: root
+  ssh-key-storage-path: keys/devops
+
+container:
+  nodename: container
+  hostname: container.4labs.example
+  description: Container Node
+  username: root
+  ssh-key-storage-path: keys/devops
+
+scm:
+  nodename: scm
+  hostname: scm.4labs.example
+  description: SCM Node
+  username: root
+  ssh-key-storage-path: keys/devops
+
+log:
+  nodename: log
+  hostname: log.4labs.example
+  description: LOG Node
+  username: root
+  ssh-key-storage-path: keys/devops
