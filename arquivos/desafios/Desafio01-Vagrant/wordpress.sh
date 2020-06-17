@@ -3,13 +3,12 @@ echo "[+] Atualizando lista de pacotes"
 apt update > /dev/null 2>&1
 
 echo "[+] Instalando o Apache e PHP"
-apt install apache2 php libapache2-mod-php php-mysql -y > /dev/null 2>&1
+apt install apache2 php libapache2-mod-php php-mysql unzip -y > /dev/null 2>&1
 
 echo "[+] Baixando o Wordpress"
-wget https://wordpress.org/latest.tar.gz -q
-
+wget https://downloads.wordpress.org/release/wordpress-5.2.3.zip -q
 echo "[+] Extraindo Wordpress para a pasta /opt/wordpress"
-tar -xf latest.tar.gz -C /var/www/
+unzip wordpress-5.2.3.zip -d /var/www/ > /dev/null 2>&1
 
 echo "[+] Configurando o Wordpress"
 mv /var/www/wordpress/wp-config-sample.php /var/www/wordpress/wp-config.php
@@ -26,3 +25,4 @@ sed -i 's./var/www/html./var/www/wordpress.' /etc/apache2/sites-available/000-de
 
 echo "[+] Reiniciando o Apache"
 systemctl restart apache2
+~                                 
