@@ -25,4 +25,3 @@ sed -i 's./var/www/html./var/www/wordpress.' /etc/apache2/sites-available/000-de
 
 echo "[+] Reiniciando o Apache"
 systemctl restart apache2
-~                                 
