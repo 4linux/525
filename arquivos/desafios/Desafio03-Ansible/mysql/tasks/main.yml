@@ -1,0 +1,40 @@
+---
+# tasks file for mariadb-server
+- name: Instalando o mariadb-server
+  package:
+    name: "mariadb-server"
+    state: present
+
+- name: Configurando o mariadb-server
+  copy:
+    src: wordpress.cnf
+    dest: /etc/my.cnf.d/wordpress.cnf
+
+- name: Habilitando e reiniciando o servico do mariadb-server
+  service:
+    name: mariadb-server
+    state: restarted
+    enabled: yes
+
+- name: Criar banco wordpress
+  mysql_db:
+    name: wordpress
+    state: present
+
+- name: Criar usuário wordpressuser
+  mysql_user:
+    name: wordpressuser
+    password: 4linux
+    priv: '*.*:ALL'
+    state: present
+
+- name: Configurando de dump do banco
+  copy:
+    src: base.sql
+    dest: /vagrant/base.sql
+
+- name: Importar base sql
+  mysql_db:
+    state: import
+    name: wordpress
+    target: /vagrant/base.sql
