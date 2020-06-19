@@ -1,11 +1,20 @@
 class wordpress {
 
-  $pacotes_wordpress = [ 'apache2', 'php', 'libapache2-mod-php', 'php-mysql' ]
+  package { 'apache2':
+  ensure  => present,
+ }
 
-  package { $pacotes_wordpress:
-  ensure  => installed,
-  alias   => 'pacotes',
-  }
+  package { 'php':
+  ensure  => present,
+ }
+
+  package { 'libapache2-mod-php':
+  ensure  => present,
+ }
+
+  package { 'php-mysql':
+  ensure  => present,
+ }
 
   file {'/tmp/latest.tar.gz':
   path    => '/tmp/latest.tar.gz',
@@ -22,22 +31,22 @@ class wordpress {
   }
 
   file { 'wp-config.php':
-  path 	  => '/var/www/wordpress/wp-config.php',
-  source  => 'puppet:///modules/wordpress/wp-config.php',
-  require => Package['pacotes'],
-  notify  => Service['apache2']
+    path    => '/var/www/wordpress/wp-config.php',
+    source  => 'puppet:///modules/wordpress/wp-config.php',
+    require => Package['libapache2-mod-php'],
+    notify  => Service['apache2']
   }
 
   file { '000-default.conf':
-  path 	  => '/etc/apache2/sites-available/000-default.conf',
-  source  => 'puppet:///modules/wordpress/000-default.conf',
-  require => Package['pacotes'],
-  notify  => Service['apache2']
+    path    => '/etc/apache2/sites-available/000-default.conf',
+    source  => 'puppet:///modules/wordpress/000-default.conf',
+    require => Package['libapache2-mod-php'],
+    notify  => Service['apache2']
   }
 
   service {'apache2':
-  ensure  => running,
-  enable  => true,
-  require => File['wp-config.php']
+    ensure  => running,
+    enable  => true,
+    require => File['wp-config.php']
   }
 }
