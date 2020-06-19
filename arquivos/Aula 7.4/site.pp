@@ -1,4 +1,4 @@
-node 'log' {
+node 'log.4labs.example' {
         include elastic_stack::java8
         include elastic_stack::repo
 	include elastic_stack::nginx
@@ -7,7 +7,7 @@ node 'log' {
         include elastic_stack::logstash
 }
 
-node 'compliance' {
+node 'compliance.4labs.example' {
         include inspec
         include elastic_stack::repo
         include elastic_stack::filebeat
