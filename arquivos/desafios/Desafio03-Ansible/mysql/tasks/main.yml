@@ -12,7 +12,7 @@
 
 - name: Habilitando e reiniciando o servico do mariadb-server
   service:
-    name: mariadb-server
+    name: mariadb
     state: restarted
     enabled: yes
 
