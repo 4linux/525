@@ -5,6 +5,11 @@
     name: "mariadb-server"
     state: present
 
+- name: Instalando o MySQL-python
+  package:
+    name: "MySQL-python"
+    state: present
+
 - name: Configurando o mariadb-server
   copy:
     src: wordpress.cnf
