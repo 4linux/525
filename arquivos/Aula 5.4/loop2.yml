@@ -6,7 +6,6 @@
     apt:
       name: "{{ item }}"
     loop:
-    - sl
-    - cmatrix
-    - ncdu
+    - htop
+    - nfs-common
     - dnsutils
