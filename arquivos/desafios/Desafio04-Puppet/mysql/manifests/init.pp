@@ -1,16 +1,17 @@
-class mysql {
+class mariadb {
 
-  $pacotes_mysql = [ 'mariadb-server', 'MySQL-python' ]
+  package { 'mariadb-server':
+  ensure  => present,
+  }
 
-  package { $pacotes_mysql:
-  ensure  => installed,
-  alias   => 'pacotes',
+  package { 'MySQL-python':
+  ensure  => present,
   }
 
   file { 'wordpress.cnf':
-  path 	  => '/etc/my.cnf.d/wordpress.cnf',
-  source  => 'puppet:///modules/mysql/wordpress.cnf',
-  require => Package['pacotes'],
+  path    => '/etc/my.cnf.d/wordpress.cnf',
+  source  => 'puppet:///modules/mariadb/wordpress.cnf',
+  require => Package['mariadb-server'],
   notify  => Service['mariadb']
   }
 
@@ -29,9 +30,9 @@ class mysql {
   }
 
   file { 'base.sql':
-  path 	  => '/tmp/base.sql',
-  source  => 'puppet:///modules/mysql/base.sql',
-  require => Package['pacotes'],
+  path    => '/tmp/base.sql',
+  source  => 'puppet:///modules/mariadb/base.sql',
+  require => Package['MySQL-python'],
   }
 
   exec { 'populando_base':
