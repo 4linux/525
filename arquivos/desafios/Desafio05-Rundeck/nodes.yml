@@ -31,3 +31,17 @@ log:
   description: LOG Node
   username: root
   ssh-key-storage-path: keys/devops
+
+wordpress:
+  nodename: wordpress
+  hostname: wordpress.4labs.example
+  description: WORDPRESS Node
+  username: root
+  ssh-key-storage-path: keys/devops
+  
+mysql:
+  nodename: mysql
+  hostname: mysql.4labs.example
+  description: MYSQL Node
+  username: root
+  ssh-key-storage-path: keys/devops
