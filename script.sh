@@ -17,9 +17,12 @@
     echo '10.5.25.50 log.4labs.example' >> /etc/hosts
 
     # Criando arquivo de SWAP 
-    fallocate -l 1G /swapfile
-    chmod 600 /swapfile
-    mkswap /swapfile
-    echo -e "/swapfile swap swap defaults 0 0" >> /etc/fstab
-    swapon -a
+    SWAP=$(swapon -v)
+    if [ -z "$SWAP" ]; then
+      fallocate -l 1G /swapfile
+      chmod 600 /swapfile
+      mkswap /swapfile
+      echo -e "/swapfile swap swap defaults 0 0" >> /etc/fstab
+      swapon -a
+    fi
 
