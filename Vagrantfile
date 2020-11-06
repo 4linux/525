@@ -1,33 +1,35 @@
 # -*- mode: ruby -*-
-# vi: set ft=ruby  :
+# vi: set ft=ruby :
 
-machines = {
-  "automation" => {"memory" => "1536", "cpu" => "2", "ip" => "10", "image" => "centos/7"},
-  "compliance" => {"memory" => "1024", "cpu" => "2", "ip" => "20", "image" => "ubuntu/bionic64"},
-  "container"  => {"memory" => "1536", "cpu" => "1", "ip" => "30", "image" => "centos/7"},
-  "scm"        => {"memory" => "256",  "cpu" => "1", "ip" => "40", "image" => "debian/buster64"},
-  "log"        => {"memory" => "2048", "cpu" => "1", "ip" => "50", "image" => "ubuntu/bionic64"}
+vms = {
+  'automation' => {'memory' => '2048', 'cpus' => 2, 'ip' => '10', 'box' => 'debian/buster64', 'provision' => 'automation.sh'},
+  'balancer' => {'memory' => '256', 'cpus' => 1, 'ip' => '20', 'box' => 'debian/buster64','provision' => 'balancer.sh'},
+  'database' => {'memory' => '512', 'cpus' => 1, 'ip' => '30', 'box' => 'centos/8', 'provision' => 'database.sh'},
+  'docker1' => {'memory' => '512', 'cpus' => 1, 'ip' => '100', 'box' => 'debian/buster64', 'provision' => 'docker.sh'},
+  'docker2' => {'memory' => '512', 'cpus' => 1, 'ip' => '200', 'box' => 'centos/8', 'provision' => 'docker.sh'}
 }
 
-Vagrant.configure("2") do |config|
+Vagrant.configure('2') do |config|
 
   config.vm.box_check_update = false
-  config.vm.boot_timeout = 600
-  machines.each do |name, conf|
-    config.vm.define "#{name}" do |machine|
-      machine.vm.box = "#{conf["image"]}"
-      machine.vm.hostname = "#{name}.4labs.example"
-      machine.vm.network "private_network", ip: "10.5.25.#{conf["ip"]}"
-      machine.vm.provider "virtualbox" do |vb|
-        vb.name = "#{name}"
-        vb.memory = conf["memory"]
-        vb.cpus = conf["cpu"]
-        vb.customize ["modifyvm", :id, "--groups", "/525-InfraAgil"]
+
+  vms.each do |name, conf|
+    config.vm.define "#{name}" do |k|
+      k.vm.box = "#{conf['box']}"
+      k.vm.hostname = "#{name}.example.com"
+      k.vm.network 'private_network', ip: "172.27.11.#{conf['ip']}"
+      k.vm.provider 'virtualbox' do |vb|
+        vb.memory = conf['memory']
+        vb.cpus = conf['cpus']
       end
-        if "#{conf["image"]}" == "ubuntu/bionic64" or "#{conf["image"]}" == "debian/buster64"
-          machine.vm.provision "shell", inline: "apt-get update ; apt-get install python -y; hostnamectl set-hostname #{name}.4labs.example"
-        end
+      k.vm.provider 'libvirt' do |lv|
+        lv.memory = conf['memory']
+        lv.cpus = conf['cpus']
+        lv.cputopology :sockets => 1, :cores => conf['cpus'], :threads => '1'
+      end
+      k.vm.provision 'shell', path: "provision/#{conf['provision']}", args: "#{conf['ip']}"
     end
   end
-  config.vm.provision "shell", path: "script.sh"
+
+  config.vm.provision 'shell', path: 'provision/provision.sh'
 end

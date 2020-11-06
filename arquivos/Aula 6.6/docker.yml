@@ -1,4 +1,0 @@
-- name: Instalação do Docker
-  hosts: container 
-  roles:
-  - docker

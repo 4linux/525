@@ -1,4 +1,0 @@
-- name: Aplicando as roles de Compliance
-  hosts: compliance
-  roles:
-    - geerlingguy.puppet

@@ -1,4 +1,0 @@
-- name: Instalação do Rundeck
-  hosts: automation 
-  roles:
-  - rundeck
