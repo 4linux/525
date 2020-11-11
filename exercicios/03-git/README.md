@@ -14,7 +14,9 @@ mkdir -p {lib,src,bin}
 mkdir -p {src,lib}/__pycache__
 echo 123 > src/libs.pyc
 echo 123 > src/__pycache__/a.py
+echo 123 > src/core.py
 echo 123 > lib/__pycache__/b.py
+echo 123 > lib/libs.py
 git init
 ```
 
