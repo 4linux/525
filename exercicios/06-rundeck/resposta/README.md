@@ -101,13 +101,13 @@ for P in git nginx-common nginx; do
         fi
 done
 
-if [ -n "$PACOTES" ] || [ "@options.force@" == "yes" ]; then
+if [ -n "$PACOTES" ] || [ "@option.force@" == "yes" ]; then
         apt-get update
         apt-get install -y $PACOTES
 fi
 
-if [ ! -d /var/www/html/.git ] || [ "@options.force@" == "yes" ]; then
-        rm -rf /var/www/html/*
+if [ ! -d /var/www/html/.git ] || [ "@option.force@" == "yes" ]; then
+        find /var/www/html/ -mindepth 1 -delete
         git clone https://github.com/4linux/4542-site /var/www/html
 fi
 
@@ -118,5 +118,62 @@ systemctl enable nginx
 Para facilitar, todo o arquivo YAML de definição do Job:
 
 ```yaml
+- defaultTab: nodes
+  description: ''
+  executionEnabled: true
+  id: 750982da-5e61-4451-9437-5537bf8b9a89
+  loglevel: INFO
+  name: Site
+  nodeFilterEditable: false
+  nodefilters:
+    dispatch:
+      excludePrecedence: true
+      keepgoing: false
+      rankOrder: ascending
+      successOnEmptyNodeFilter: false
+      threadcount: '1'
+    filter: 172.27.11.250
+  nodesSelectedByDefault: true
+  options:
+  - label: Force
+    name: force
+    required: true
+    value: 'no'
+    values:
+    - 'yes'
+    - 'no'
+    valuesListDelimiter: ','
+  plugins:
+    ExecutionLifecycle: null
+  scheduleEnabled: true
+  sequence:
+    commands:
+    - fileExtension: .sh
+      interpreterArgsQuoted: false
+      script: |-
+        #!/bin/bash
 
+        for P in git nginx-common nginx; do
+                dpkg -l | awk '{print $2}' | grep -E "^$P$" > /dev/null
+                if [ $? -ne 0 ]; then
+                        PACOTES="$PACOTES $P"
+                fi
+        done
+
+        if [ -n "$PACOTES" ] || [ "@option.force@" == "yes" ]; then
+                apt-get update
+                apt-get install -y $PACOTES
+        fi
+
+        if [ ! -d /var/www/html/.git ] || [ "@option.force@" == "yes" ]; then
+                find /var/www/html/ -mindepth 1 -delete
+                git clone https://github.com/4linux/4542-site /var/www/html
+        fi
+
+        systemctl start nginx
+        systemctl enable nginx
+      scriptInterpreter: sudo bash
+    keepgoing: false
+    strategy: node-first
+  uuid: exercicio-06
 ```
