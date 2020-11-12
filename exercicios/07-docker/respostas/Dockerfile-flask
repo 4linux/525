@@ -1,0 +1,9 @@
+FROM alpine
+
+COPY . /opt/app
+
+RUN apk add --no-cache py3-pip && pip3 install -r /opt/app/requirements.txt
+
+WORKDIR /opt/app
+
+CMD python3 app.py
