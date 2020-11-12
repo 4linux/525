@@ -13,7 +13,7 @@ systemctl restart sshd
 
 Agora crie o script na máquina **automation**:
 
-```
+```bash
 cat > /tmp/script.sh <<'EOF'
 #!/bin/bash
 apt-cache search nginx

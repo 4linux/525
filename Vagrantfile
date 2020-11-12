@@ -6,7 +6,8 @@ vms = {
   'balancer' => {'memory' => '256', 'cpus' => 1, 'ip' => '20', 'box' => 'debian/buster64','provision' => 'balancer.sh'},
   'database' => {'memory' => '512', 'cpus' => 1, 'ip' => '30', 'box' => 'centos/8', 'provision' => 'database.sh'},
   'docker1' => {'memory' => '512', 'cpus' => 1, 'ip' => '100', 'box' => 'debian/buster64', 'provision' => 'docker.sh'},
-  'docker2' => {'memory' => '512', 'cpus' => 1, 'ip' => '200', 'box' => 'centos/8', 'provision' => 'docker.sh'}
+  'docker2' => {'memory' => '512', 'cpus' => 1, 'ip' => '200', 'box' => 'centos/8', 'provision' => 'docker.sh'},
+  'minion' => {'memory' => '256', 'cpus' => 1, 'ip' => '250', 'box' => 'debian/buster64', 'provision' => 'balancer.sh'}
 }
 
 Vagrant.configure('2') do |config|

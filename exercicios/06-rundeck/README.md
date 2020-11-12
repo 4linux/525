@@ -2,7 +2,7 @@
 
 ## 01 - Adicionando um Node
 
-Crie uma nova máquina no `Vagrantfile` do curso chamada **minion** com **256 MB** de memória RAM e 1 CPU. Utilize a box do `debian/buster64`.
+Crie uma nova máquina no `Vagrantfile` do curso chamada **minion** com **256 MB** de memória RAM e 1 CPU. Utilize a box do `debian/buster64` e configure a vm para utilizar o ip 172.27.11.250.
 
 Adicione esta máquina ao Rundeck.
 
