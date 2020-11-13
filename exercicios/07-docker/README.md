@@ -29,6 +29,8 @@ Dancer é um framework em Perl para criar aplicações web bastante utilizado pa
 
 A construção desta imagem é relativamente demorada pois centenas de testes são executados durante a instalação, sendo assim, utilize as camadas que achar necessário e preste atenção para evitar builds desnecessárias.
 
+Esta aplicação se conecta a um servidor redis para gravar uma página HTML que pode ser modificada através de um POST em sua API conforme mostrado no final do `README.md` do repositório.
+
 Utilizar o código da aplicação em https://github.com/4linux/4542-perl para construir uma imagem chamada **<usuario>/dancer**.
 
 - Basear a imagem em **debian:buster-slim**
