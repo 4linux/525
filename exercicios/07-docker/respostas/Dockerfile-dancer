@@ -1,0 +1,11 @@
+FROM debian:buster-slim
+
+COPY . /opt/app
+
+RUN apt-get update && apt-get install -y perl cpanminus make gcc
+
+WORKDIR /opt/app
+
+RUN cpanm --installdeps .
+
+CMD plackup bin/app.psgi

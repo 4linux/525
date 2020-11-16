@@ -2,6 +2,22 @@
 
 ## Docker Básico
 
+Iniciar um contêiner do **postgres** capaz de persistir os dados salvos no banco mesmo que o contêiner seja destruído e recriado.
+
+- A imagem deve ser **postgres**
+- O usuário de acesso deve ser **devops**
+- O nome da base de dados deve ser **devops**
+- A senha de acesso deve ser **4linux**
+
+Será necessário validar na documentação da imagem qual é o diretório em que os dados do PostgreSQL ficam salvos.
+
+Ao terminar, valide o exercício executando o seguinte comando:
+
+```bash
+sudo -i
+curl -sL https://github.com/4linux/4525/blob/master/exercicios/07-docker/respostas/validador-01.sh | bash
+```
+
 ## Imagens
 
 Abaixo temos dois exercícios para criação de imagens, o primeiro é mais simples e o segundo ligeiramente mais complexo. Lembre-se que o código deve ser copiado para dentro do contêiner.
