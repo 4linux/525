@@ -24,7 +24,7 @@ done
 
 docker exec postgres psql -U devops -w devops -c 'CREATE TABLE devops (id SERIAL, nome VARCHAR(255));' &> /dev/null
 docker exec postgres psql -U devops -w devops -c "INSERT INTO devops (nome) VALUES ('Infra Ágil') ON CONFLICT DO NOTHING" > /dev/null
-echo 'Removendo contêiner para restar persistência...'
+echo 'Removendo contêiner para testar persistência...'
 docker rm -f postgres > /dev/null
 docker run --name postgres -e POSTGRES_PASSWORD=4linux -e POSTGRES_USER=devops -e POSTGRES_DB=devops -v pg_data:/var/lib/postgresql/data -d postgres > /dev/null
 echo 'Esperando banco iniciar...'
