@@ -2,6 +2,12 @@
 
 ## Docker Básico
 
+O exercício é resolvido com um único `docker run`:
+
+```bash
+docker run --name postgres -e POSTGRES_PASSWORD=4linux -e POSTGRES_USER=devops -e POSTGRES_DB=devops -v pg_data:/var/lib/postgresql/data -d postgres
+```
+
 ## Imagens
 
 Abaixo temos dois exercícios para criação de imagens, o primeiro é mais simples e o segundo ligeiramente mais complexo. Lembre-se que o código deve ser copiado para dentro do contêiner.

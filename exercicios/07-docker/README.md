@@ -15,7 +15,7 @@ Ao terminar, valide o exercício executando o seguinte comando:
 
 ```bash
 sudo -i
-curl -sL https://github.com/4linux/4525/blob/master/exercicios/07-docker/respostas/validador-01.sh | bash
+curl -sL https://raw.githubusercontent.com/4linux/4525/master/exercicios/07-docker/respostas/validador-01.sh | bash
 ```
 
 ## Imagens

@@ -3,6 +3,7 @@
 docker container inspect postgres > /dev/null
 if [ "$?" -ne 0 ]; then
     echo -e '\e[31mContêiner chamado "postgres" não encontrado\e[0m'
+    exit 1
 else
     echo -e '\e[32mEncontramos o contêiner!\e[0m'
 fi
@@ -15,6 +16,7 @@ for X in 'DB|devops' 'USER|devops' 'PASSWORD|4linux'; do
     eval "CURRENT=\$POSTGRES_$SUFIX"
     if [ "$CURRENT" != "$EXPECTED" ]; then
         echo -e "\e[31mVariável POSTGRES_$SUFIX com valor errado: '$CURRENT' deveria ser '$EXPECTED'\e[0m"
+        exit 2
     else
         echo -e "\e[32mVariável POSTGRES_$SUFIX com valor correto\e[0m"
     fi
@@ -30,6 +32,7 @@ sleep 10
 docker exec postgres psql -U devops -w devops -c "SELECT * FROM devops WHERE nome = 'Infra Ágil' LIMIT 1" -t | grep 'Infra Ágil'
 if [ "$?" -ne 0 ]; then
     echo -e '\e[31mNão foi possível acessar o banco de dados, verifique as variáveis e o nome do contêiner\e[0m'
+    exit 3
 else
     echo -e '\e[32mTudo certo!\e[0m'
 fi
