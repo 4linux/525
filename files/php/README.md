@@ -22,9 +22,11 @@ Esta aplicação utiliza 5 variáveis de ambiente, todas elas servem para se con
 
 O PHP utiliza o php.ini para configurar o servidor externo de cache, como por exemplo o memcached. Neste caso, dentro do php.ini adicionar:
 
+```ini
 [Session]
 session.save_handler = memcached
 session.save_path = "m1:11211,m2:11211,m3:11211...m9:11211"
+```
 
 ## MySQL
 
