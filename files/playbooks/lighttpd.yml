@@ -1,0 +1,49 @@
+- hosts: docker
+  become: yes
+  vars:
+    user: lighttpd
+    group: lighttpd
+  tasks:
+  - name: Verificando distribuição
+    set_fact:
+      user: www-data
+      group: www-data
+    when: ansible_distribution|lower == 'debian'
+  - name: Garantindo o epel-release em CentOS
+    package:
+      name: epel-release
+      state: present
+    when: ansible_distribution|lower == 'centos'
+  - name: Garantindo Lighttpd
+    package:
+      name: lighttpd
+      state: present
+  - name: Garantindo configurações
+    template:
+      src: '{{ item }}'
+      dest: /etc/lighttpd
+      owner: root
+    loop:
+    - /root/playbooks/files/lighttpd.conf
+    - /root/playbooks/files/mime-types.conf
+  - name: Garantindo diretórios
+    file:
+      path: '{{ item }}'
+      owner: '{{ user }}'
+      group: '{{ group }}'
+      state: directory
+    loop:
+    - /srv/www/html
+    - /var/cache/lighttpd
+    - /var/logs/lighttpd
+  - name: Garantindo serviço do Lighttpd
+    service:
+      name: lighttpd
+      state: started
+      enabled: yes
+  - name: Testando conexão com load balancer
+    uri:
+      url: http://172.27.11.20
+      status_code: [200, 302, 304]
+    delegate_to: localhost
+    run_once: yes

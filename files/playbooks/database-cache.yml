@@ -1,0 +1,44 @@
+- hosts: database
+  become: yes
+  tasks:
+  - name: Garantindo MariaDB e Memcached
+    package:
+      name: ['mariadb', 'memcached']
+      state: present
+  - name: Garantindo MariaDB e Memcached na interface privada
+    lineinfile:
+      path: '{{ item.path }}'
+      line: '{{ item.line }}'
+      regex: '{{ item.regex }}'
+    loop:
+    - path: /etc/sysconfig/memcached
+      line: OPTIONS="-l 172.27.11.30"
+      regex: OPTIONS="-l
+    - path: /etc/my.cnf.d/mariadb-server.cnf
+      line: bind-address=172.27.11.30
+      regex: '#?bind-address\s*=\s*[\d]{1,3}\.[\d]{1,3}\.[\d]{1,3}\.[\d]{1,3}'
+  - name: Garantindo serviço do MariaDB e Memcached
+    service:
+      name: '{{ item }}'
+      state: started
+      enabled: yes
+    loop:
+    - mariadb
+    - memcached
+  - name: Garantindo base de dados da Aplicação
+    community.mysql.mysql_db:
+      name: infraagil
+      login_unix_socket: /var/lib/mysql/mysql.sock
+    register: database
+  - name: Garantindo dados iniciais
+    community.mysql.mysql_db:
+      name: infraagil
+      login_unix_socket: /var/lib/mysql/mysql.sock
+      state: import
+      target: /tmp/dump.sql
+    when: database.changed
+  - name: Garantindo usuário da Aplicação
+    community.mysql.mysql_user:
+      name: devops
+      password: 4linux
+      priv: infraagil.*:ALL
