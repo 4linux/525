@@ -1,0 +1,8 @@
+# Tarefas específicas do CentOS
+- name: Garantindo o epel-release em CentOS
+  package:
+    name: epel-release
+    state: present
+- name: Desabilitando o SELinux em CentOS
+  selinux:
+    state: disabled

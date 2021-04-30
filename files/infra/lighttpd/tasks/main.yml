@@ -1,0 +1,47 @@
+---
+- name: Incluindo variáveis
+  include_vars: '{{ ansible_distribution|lower }}.yml'
+- name: Incluindo tarefas
+  include_tasks: '{{ ansible_distribution|lower }}.yml'
+- name: Garantindo Lighttpd
+  package:
+    name: lighttpd
+    state: present
+- name: Garantindo lighttpd.conf
+  template:
+    src: lighttpd.conf
+    dest: /etc/lighttpd
+- name: Garantindo mime-types.conf
+  copy:
+    src: mime-types.conf
+    dest: /etc/lighttpd
+    owner: root
+- name: Garantindo diretórios
+  file:
+    path: '{{ item }}'
+    owner: '{{ user }}'
+    group: '{{ group }}'
+    state: directory
+  loop:
+  - /srv/www/html
+  - /var/cache/lighttpd
+  - /var/logs/lighttpd
+- name: Garantindo configurações de proxy
+  blockinfile:
+    path: /etc/lighttpd/proxy.conf
+    create: yes
+    block: |
+      $SERVER["socket"] == ":8080" {
+          proxy.server = ( "" => ( ( "host" => "192.168.10.10", "port" => "80" )))
+      }
+- name: Garantindo serviço do Lighttpd
+  service:
+    name: lighttpd
+    state: started
+    enabled: yes
+- name: Testando conexão com load balancer
+  uri:
+    url: http://172.27.11.20
+    status_code: [200, 302, 304]
+  delegate_to: localhost
+  run_once: yes

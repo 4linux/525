@@ -1,0 +1,16 @@
+[all:vars]
+ansible_python_interpreter=python3
+ansible_ssh_private_key_file = /root/keys/ansible
+
+[automation]
+172.27.11.10
+
+[balancer]
+172.27.11.20
+
+[database]
+172.27.11.30
+
+[docker]
+172.27.11.100
+172.27.11.200
