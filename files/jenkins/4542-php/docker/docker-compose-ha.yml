@@ -1,0 +1,33 @@
+version: '3.7'
+
+services:
+   mysql:
+     image: mysql
+     command: --default-authentication-plugin=mysql_native_password
+     environment:
+       MYSQL_ROOT_PASSWORD: Abc123!
+       MYSQL_DATABASE: php
+       MYSQL_USER: php
+       MYSQL_PASSWORD: 4linux
+
+   memcached1:
+     image: memcached
+   memcached2:
+     image: memcached
+
+   app:
+     depends_on:
+     - mysql
+     - memcached1
+     - memcached2
+     image: php-ms
+     deploy:
+       mode: global
+     ports:
+     - "8080:8080"
+     environment:
+       DB_HOST: mysql
+       DB_PORT: 3306
+       DB_USER: php
+       DB_PASS: 4linux
+       DB_NAME: php

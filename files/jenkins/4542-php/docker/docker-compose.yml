@@ -1,0 +1,22 @@
+version: '3.3'
+
+services:
+   mysql:
+     image: mariadb
+     environment:
+       MYSQL_ROOT_PASSWORD: Abc123!
+       MYSQL_DATABASE: php
+       MYSQL_USER: php
+       MYSQL_PASSWORD: 4linux
+   memcached:
+     image: memcached:alpine
+   app:
+     depends_on:
+     - mysql
+     image: viniciusfelix1/php-login
+     environment:
+       DB_HOST: mysql
+       DB_PORT: 3306
+       DB_USER: php
+       DB_PASS: 4linux
+       DB_NAME: php
