@@ -1,0 +1,50 @@
+- hosts: docker
+  become: yes
+  tasks:
+  - name: Removendo pacotes antigos
+    package:
+      name: ['docker', 'docker-engine', 'docker.io', 'containerd', 'runc']
+      state: absent
+  - name: Bloco do Debian
+    block:
+    - name: Garantindo pré-dependências
+      package:
+        name: ['apt-transport-https', 'ca-certificates', 'gnupg-agent', 'software-properties-common']
+        state: present
+    - name: Garantindo chave do repositório
+      apt_key:
+        url: https://download.docker.com/linux/debian/gpg
+        state: present
+    - name: Garantindo repositório
+      apt_repository:
+        repo: "deb [arch=amd64] https://download.docker.com/linux/debian {{ ansible_lsb.codename }} stable"
+        state: present
+        filename: docker-ce
+    when: ansible_distribution|lower == 'debian'
+  - name: Bloco do CentOS
+    block:
+    - name: Garantindo chave do repositório
+      rpm_key:
+        state: present
+        key: https://download.docker.com/linux/centos/gpg
+    - name: Garantindo repositório
+      yum_repository:
+        name: docker-ce
+        baseurl: https://download.docker.com/linux/centos/$releasever/$basearch/stable
+        description: Docker CE Stable
+        file: docker-ce
+    when: ansible_distribution|lower == 'centos'
+  - name: Garantindo pacote docker-ce
+    package:
+      name: docker-ce
+      state: present
+  - name: Garantindo execução do daemon
+    service:
+      name: docker
+      enabled: yes
+      state: started
+  - name: Garantindo binário docker-compose
+    get_url:
+      url: "https://github.com/docker/compose/releases/download/1.28.5/docker-compose-{{ ansible_system }}-{{ ansible_architecture }}"
+      dest: /usr/bin/docker-compose
+      mode: '0755'
