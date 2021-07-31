@@ -1,0 +1,2 @@
+CMD="sudo sed 's/vagrant/rundeck/g' /etc/sudoers.d/vagrant | sudo tee /etc/ sudoers.d/rundeck"
+for M in $(vagrant status | grep 'running' | cut -d' ' -f1); do vagrant ssh $M - c "$CMD"; done
