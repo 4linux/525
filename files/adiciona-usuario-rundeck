@@ -1,0 +1,2 @@
+CMD='sudo useradd --system --shell /bin/bash --create-home --home-dir /var/lib/rundeck rundeck'
+for M in $(vagrant status | grep 'running' | cut -d' ' -f1); do vagrant ssh $M -c "$CMD"; done
