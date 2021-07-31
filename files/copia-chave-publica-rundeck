@@ -1,3 +1,3 @@
 KEY="$(vagrant ssh automation -c 'sudo cat /root/keys/rundeck.pub' < /dev/null)"
-CMD="sudo -u rundeck -s /bin/bash -c \'mkdir -p ~/.ssh && echo '$KEY' > ~/.ssh/authorized_keys\'"
+CMD="sudo -u rundeck -s /bin/bash -c \'mkdir -p ~/.ssh && echo "$KEY" > ~/.ssh/authorized_keys\'"
 for M in $(vagrant status | grep 'running' | cut -d' ' -f1); do vagrant ssh $M -c "$CMD"; done
