@@ -18,7 +18,7 @@ Clone o repositório em algum diretório da sua máquina e inicie as vms:
 
 ```bash
 git clone https://github.com/4linux/4525.git
-cd 4542
+cd 4525
 vagrant up
 ```
 
