@@ -16,7 +16,6 @@ apt-get update
 apt-get install -y jenkins rundeck rundeck-cli
 
 # Rundeck
-sed -i s/rundeck.projectsStorageType=db/rundeck.projectsStorageType=filesystem/ /etc/rundeck/rundeck-config.properties
 sed -i s/admin:admin/devops:4linux/g /etc/rundeck/realm.properties
 sed -i s/localhost/172.27.11.10/g /etc/rundeck/framework.properties
 sed -i s/localhost/172.27.11.10/g /etc/rundeck/rundeck-config.properties
