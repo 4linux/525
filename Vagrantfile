@@ -19,6 +19,7 @@ Vagrant.configure('2') do |config|
       k.vm.hostname = "#{name}.example.com"
       k.vm.network 'private_network', ip: "172.27.11.#{conf['ip']}"
       k.vm.provider 'virtualbox' do |vb|
+        vb.customize ["modifyvm", :id, "--groups", "/InfraAgil"]
         vb.memory = conf['memory']
         vb.cpus = conf['cpus']
       end
