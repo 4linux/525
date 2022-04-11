@@ -4,9 +4,9 @@
 vms = {
   'automation' => {'memory' => '2048', 'cpus' => 2, 'ip' => '10', 'box' => 'debian/bullseye64', 'provision' => 'automation.sh'},
   'balancer' => {'memory' => '256', 'cpus' => 1, 'ip' => '20', 'box' => 'debian/bullseye64','provision' => 'balancer.sh'},
-  'database' => {'memory' => '512', 'cpus' => 1, 'ip' => '30', 'box' => 'centos/stream8', 'provision' => 'database.sh'},
+  'database' => {'memory' => '512', 'cpus' => 1, 'ip' => '30', 'box' => 'devopsbox/centos-8.5', 'provision' => 'database.sh'},
   'docker1' => {'memory' => '512', 'cpus' => 1, 'ip' => '100', 'box' => 'debian/bullseye64', 'provision' => 'docker.sh'},
-  'docker2' => {'memory' => '512', 'cpus' => 1, 'ip' => '200', 'box' => 'centos/stream8', 'provision' => 'docker.sh'}
+  'docker2' => {'memory' => '512', 'cpus' => 1, 'ip' => '200', 'box' => 'devopsbox/centos-8.5', 'provision' => 'docker.sh'}
 }
 
 Vagrant.configure('2') do |config|
