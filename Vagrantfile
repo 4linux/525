@@ -2,11 +2,11 @@
 # vi: set ft=ruby :
 
 vms = {
-  'automation' => {'memory' => '2048', 'cpus' => 2, 'ip' => '10', 'box' => 'debian/buster64', 'provision' => 'automation.sh'},
-  'balancer' => {'memory' => '256', 'cpus' => 1, 'ip' => '20', 'box' => 'debian/buster64','provision' => 'balancer.sh'},
-  'database' => {'memory' => '512', 'cpus' => 1, 'ip' => '30', 'box' => 'centos/8', 'provision' => 'database.sh'},
-  'docker1' => {'memory' => '512', 'cpus' => 1, 'ip' => '100', 'box' => 'debian/buster64', 'provision' => 'docker.sh'},
-  'docker2' => {'memory' => '512', 'cpus' => 1, 'ip' => '200', 'box' => 'centos/8', 'provision' => 'docker.sh'}
+  'automation' => {'memory' => '2048', 'cpus' => 2, 'ip' => '10', 'box' => 'debian/bullseye64', 'provision' => 'automation.sh'},
+  'balancer' => {'memory' => '256', 'cpus' => 1, 'ip' => '20', 'box' => 'debian/bullseye64','provision' => 'balancer.sh'},
+  'database' => {'memory' => '512', 'cpus' => 1, 'ip' => '30', 'box' => 'devopsbox/centos-8.5', 'provision' => 'database.sh'},
+  'docker1' => {'memory' => '512', 'cpus' => 1, 'ip' => '100', 'box' => 'debian/bullseye64', 'provision' => 'docker.sh'},
+  'docker2' => {'memory' => '512', 'cpus' => 1, 'ip' => '200', 'box' => 'devopsbox/centos-8.5', 'provision' => 'docker.sh'}
 }
 
 Vagrant.configure('2') do |config|
@@ -19,6 +19,7 @@ Vagrant.configure('2') do |config|
       k.vm.hostname = "#{name}.example.com"
       k.vm.network 'private_network', ip: "172.27.11.#{conf['ip']}"
       k.vm.provider 'virtualbox' do |vb|
+        vb.customize ["modifyvm", :id, "--groups", "/InfraAgil"]
         vb.memory = conf['memory']
         vb.cpus = conf['cpus']
       end

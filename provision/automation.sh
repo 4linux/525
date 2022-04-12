@@ -1,18 +1,18 @@
 #!/bin/bash
 
-apt-get update
-apt-get install -y vim ansible openjdk-11-jdk gnupg2 curl git sqlite3
+apt-get --allow-releaseinfo-change update
+apt-get install -y vim ansible openjdk-11-jdk gnupg2 curl git sqlite3 ca-certificates
 
 # Jenkins
 wget -q -O - 'https://pkg.jenkins.io/debian-stable/jenkins.io.key' | apt-key add -
-echo 'deb https://pkg.jenkins.io/debian-stable binary/' > /etc/apt/sources.list.d/jenkins.list
+echo 'deb [trusted=yes] https://pkg.jenkins.io/debian-stable binary/' > /etc/apt/sources.list.d/jenkins.list
 
 # Rundeck
 #wget -q -O - 'https://bintray.com/user/downloadSubjectPublicKey?username=bintray' | apt-key add -
 #echo 'deb https://rundeck.bintray.com/rundeck-deb /' > /etc/apt/sources.list.d/rundeck.list
 curl -s https://packagecloud.io/install/repositories/pagerduty/rundeck/script.deb.sh | os=any dist=any bash
 
-apt-get update
+apt-get --allow-releaseinfo-change update
 apt-get install -y jenkins rundeck rundeck-cli
 
 # Rundeck
