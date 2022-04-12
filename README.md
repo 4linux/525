@@ -14,6 +14,17 @@ Para clonar o repositório você precisará do [git](https://git-scm.com/), para
 
 ## Configuração
 
+Nesse ambiente, que está centralizado no arquivo [Vagrantfile](https://github.com/4linux/525/blob/master/Vagrantfile), serão criados 5 máquinas com as seguintes características:
+
+Nome            | vCPUs | Memoria RAM | IP            | S.O.         
+----------------|:-----:|:-----------:|:-------------:|:---------------:
+automation      | 2     | 2048MB      | 172.27.11.10  | debian/bullseye64
+balancer        | 1     | 256MB       | 172.27.11.20  | debian/bullseye64
+database        | 1     | 512MB       | 172.27.11.30  | centos-8.5
+docker1         | 1     | 512MB       | 172.27.11.100 | debian/bullseye64
+docker2         | 1     | 512MB       | 172.27.11.200 | centos-8.5
+
+
 Clone o repositório em algum diretório da sua máquina e inicie as vms:
 
 ```bash
