@@ -1,7 +1,7 @@
 #!/bin/bash
 
 apt-get --allow-releaseinfo-change update
-apt-get install -y vim ansible openjdk-11-jdk gnupg2 curl git sqlite3 ca-certificates
+apt-get install -y vim ansible openjdk-17-jre gnupg2 curl git sqlite3 ca-certificates
 
 # Jenkins
 wget -q -O - 'https://pkg.jenkins.io/debian-stable/jenkins.io.key' | apt-key add -

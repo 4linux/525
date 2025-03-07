@@ -1,11 +1,12 @@
-- hosts: database
+- name: Configuracao MariaDB e Memcached
+  hosts: database
   become: yes
   tasks:
   - name: Garantindo MariaDB e Memcached
     package:
-      name: ['mariadb', 'memcached']
+      name: ['mariadb-server', 'memcached']
       state: present
-  - name: Garantindo MariaDB e Memcached na interface privada
+  - name: Garantindo a interface dos serviços MariaDB e Memcached
     lineinfile:
       path: '{{ item.path }}'
       line: '{{ item.line }}'
@@ -37,6 +38,7 @@
       name: infraagil
       login_unix_socket: /var/lib/mysql/mysql.sock
     register: database
+
   - name: Garantindo dados iniciais
     community.mysql.mysql_db:
       name: infraagil
@@ -46,8 +48,8 @@
     when: database.changed
   - name: Garantindo usuário da Aplicação
     community.mysql.mysql_user:
+      login_unix_socket: /var/lib/mysql/mysql.sock
       name: devops
       password: 4linux
       priv: infraagil.*:ALL
       host: '%'
-      login_unix_socket: /var/lib/mysql/mysql.sock

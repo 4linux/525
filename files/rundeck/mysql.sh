@@ -8,7 +8,7 @@ function _debian {
         apt-get update && apt-get install -y --simulate mariadb-server
 } 
 
-function _centos {
+function _almalinux {
 	rpm -qa | grep mariadb-server > /dev/null
 	test $? -eq 0 && return
 	dnf install -y mariadb-server

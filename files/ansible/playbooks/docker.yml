@@ -1,50 +1,81 @@
-- hosts: docker
+- name: Instalação do Docker no Debian 11 e AlmaLinux 8
+  hosts: docker
   become: yes
   tasks:
-  - name: Removendo pacotes antigos
-    package:
-      name: ['docker', 'docker-engine', 'docker.io', 'containerd', 'runc']
-      state: absent
-  - name: Bloco do Debian
-    block:
-    - name: Garantindo pré-dependências
-      package:
-        name: ['apt-transport-https', 'ca-certificates', 'gnupg-agent', 'software-properties-common']
-        state: present
-    - name: Garantindo chave do repositório
-      apt_key:
-        url: https://download.docker.com/linux/debian/gpg
-        state: present
-    - name: Garantindo repositório
-      apt_repository:
-        repo: "deb [arch=amd64] https://download.docker.com/linux/debian {{ ansible_lsb.codename }} stable"
-        state: present
-        filename: docker-ce
-    when: ansible_distribution|lower == 'debian'
-  - name: Bloco do CentOS
-    block:
-    - name: Garantindo chave do repositório
-      rpm_key:
-        state: present
-        key: https://download.docker.com/linux/centos/gpg
-    - name: Garantindo repositório
-      yum_repository:
-        name: docker-ce
-        baseurl: https://download.docker.com/linux/centos/$releasever/$basearch/stable
-        description: Docker CE Stable
-        file: docker-ce
-    when: ansible_distribution|lower == 'centos'
-  - name: Garantindo pacote docker-ce
-    package:
-      name: docker-ce
-      state: present
-  - name: Garantindo execução do daemon
-    service:
-      name: docker
-      enabled: yes
-      state: started
-  - name: Garantindo binário docker-compose
-    get_url:
-      url: "https://github.com/docker/compose/releases/download/1.28.5/docker-compose-{{ ansible_system }}-{{ ansible_architecture }}"
-      dest: /usr/bin/docker-compose
-      mode: '0755'
+
+    - name: Verificar a distribuição do sistema operacional
+      ansible.builtin.setup:
+        filter: ansible_distribution
+
+    - name: Instalar pacotes necessários para Docker no Debian 11
+      when: ansible_distribution == "Debian"
+      block:
+        - name: Atualizar cache do APT
+          ansible.builtin.apt:
+            update_cache: yes
+
+        - name: Instalar dependências
+          ansible.builtin.apt:
+            name:
+              - apt-transport-https
+              - ca-certificates
+              - curl
+              - gnupg
+              - lsb-release
+            state: present
+
+        - name: Adicionar chave GPG do Docker
+          ansible.builtin.apt_key:
+            url: https://download.docker.com/linux/debian/gpg
+            state: present
+
+        - name: Adicionar repositório do Docker
+          ansible.builtin.apt_repository:
+            repo: "deb [arch=amd64] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable"
+            state: present
+
+        - name: Instalar Docker
+          ansible.builtin.apt:
+            name: docker-ce
+            state: present
+            update_cache: yes
+
+    - name: Instalar pacotes necessários para Docker no AlmaLinux 8
+      when: ansible_distribution == "AlmaLinux"
+      block:
+        - name: Instalar dependências
+          ansible.builtin.yum:
+            name:
+              - yum-utils
+              - device-mapper-persistent-data
+              - lvm2
+            state: present
+
+        - name: Adicionar repositório do Docker
+          ansible.builtin.command:
+            cmd: "dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo"
+          args:
+            creates: /etc/yum.repos.d/docker-ce.repo
+
+        - name: Instalar Docker
+          ansible.builtin.yum:
+            name: docker-ce
+            state: present
+
+    - name: Habilitar e iniciar o serviço Docker
+      ansible.builtin.service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Instalando Docker Compose
+      get_url:
+        url: "https://github.com/docker/compose/releases/download/v2.23.1/docker-compose-linux-{{ ansible_architecture }}"
+        dest: /usr/local/bin/docker-compose
+        mode: '0755'
+
+    - name: Criando link simbólico para Docker Compose
+      file:
+        src: /usr/local/bin/docker-compose
+        dest: /usr/bin/docker-compose
+        state: link

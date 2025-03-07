@@ -1,8 +1,8 @@
 # Tarefas específicas do CentOS
-- name: Garantindo o epel-release em CentOS
+- name: Garantindo o epel-release em almalinux
   package:
     name: epel-release
     state: present
-- name: Desabilitando o SELinux em CentOS
+- name: Desabilitando o SELinux em almalinux
   selinux:
     state: disabled

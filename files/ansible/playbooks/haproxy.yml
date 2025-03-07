@@ -1,15 +1,16 @@
-- hosts: balancer
+- name: Configuracao do HAProxy
+  hosts: balancer
   become: yes
   tasks:
-  - name: Garantindo o HAProxy
+  - name: Garantindo HAProxy
     package:
       name: haproxy
       state: present
-  - name: Garantindo a configuração
+  - name: Garantindo configuracao
     copy:
-      src: haproxy.cfg
-      dest: /etc/haproxy/
-  - name: Garantindo o serviço HAProxy
+      src: /root/playbooks/files/haproxy.cfg
+      dest: /etc/haproxy
+  - name: Garantindo servico do HAProxy
     service:
       name: haproxy
       state: restarted

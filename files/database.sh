@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source /etc/os-release # ID = centos,debian, NAME
+source /etc/os-release # ID = almalinux,debian, NAME
 
 function _debian {
     dpkg -l | grep mariadb-server > /dev/null
@@ -8,7 +8,7 @@ function _debian {
     apt-get update && apt-get install -y mariadb-server
 }
 
-function _centos {
+function almalinux {
     rpm -qa | grep mariadb-server > /dev/null
     test $? -eq 0 && return
     dnf install -y mariadb-server
@@ -16,4 +16,4 @@ function _centos {
     systemctl enable mariadb
 }
 
-_$ID # executa _debian ou _centos
+_$ID # executa _debian ou almalinux
