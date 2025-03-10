@@ -20,16 +20,16 @@ Nome            | vCPUs | Memoria RAM | IP            | S.O.
 ----------------|:-----:|:-----------:|:-------------:|:---------------:
 automation      | 2     | 2048MB      | 172.27.11.10  | debian/bullseye64
 balancer        | 1     | 256MB       | 172.27.11.20  | debian/bullseye64
-database        | 1     | 512MB       | 172.27.11.30  | centos-8.5
+database        | 1     | 512MB       | 172.27.11.30  | almalinux/8
 docker1         | 1     | 512MB       | 172.27.11.100 | debian/bullseye64
-docker2         | 1     | 512MB       | 172.27.11.200 | centos-8.5
+docker2         | 1     | 512MB       | 172.27.11.200 | almalinux/8
 
 
 Clone o repositório em algum diretório da sua máquina e inicie as vms:
 
 ```bash
-git clone https://github.com/4linux/4525.git
-cd 4525
+git clone https://github.com/4linux/525.git
+cd 525
 vagrant up
 ```
 
